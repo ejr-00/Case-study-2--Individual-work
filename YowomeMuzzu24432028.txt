@@ -1,0 +1,432 @@
+YOWOME ELIKPLIM MUZZU
+24432028
+COHORT B	
+
+
+
+MariaDB [(none)]> create database Projects;
+Query OK, 1 row affected (0.010 sec)
+
+MariaDB [(none)]> use Projects;
+Database changed
+
+QUESTION 1
+
+MariaDB [Projects]> CREATE TABLE Employee
+    -> (
+    ->
+    -> empNo CHAR(5) PRIMARY KEY,
+    ->
+    -> fName VARCHAR(30) NOT NULL,
+    ->
+    -> lName VARCHAR(30) NOT NULL,
+    ->
+    -> address VARCHAR(100),
+    ->
+    -> DOB DATE,
+    ->
+    -> sex CHAR(1)
+    ->
+    -> CHECK (sex IN ('M','F')),
+    ->
+    -> position VARCHAR(25)
+    ->
+    -> CHECK (position IN
+    ->
+    -> ('Manager', 'Team Leader', 'Analyst', 'Software Developer')),
+    ->
+    -> deptNo CHAR(5)
+    ->
+    -> );
+Query OK, 0 rows affected (0.058 sec)
+
+MariaDB [Projects]> CREATE TABLE Department
+    -> (
+    ->
+    -> deptNo CHAR(5) PRIMARY KEY,
+    ->
+    -> deptName VARCHAR(50) NOT NULL,
+    ->
+    -> mgrEmpNo CHAR(5)
+    ->
+    -> )
+    -> ;
+Query OK, 0 rows affected (0.015 sec)
+
+MariaDB [Projects]> CREATE TABLE Project
+    -> (
+    ->
+    -> projNo CHAR(5) PRIMARY KEY,
+    ->
+    -> projName VARCHAR(50) NOT NULL,
+    ->
+    -> deptNo CHAR(5),
+    ->
+    ->
+    ->
+    -> FOREIGN KEY (deptNo)
+    ->
+    -> REFERENCES Department(deptNo)
+    ->
+    -> );
+Query OK, 0 rows affected (0.020 sec)
+
+MariaDB [Projects]> CREATE TABLE WorksOn
+    -> (
+    ->
+    ->  empNo CHAR(5),
+    ->
+    ->  projNo CHAR(5),
+    ->
+    ->  dateWorked DATE,
+    ->
+    ->  hoursWorked INT
+    ->
+    ->  CHECK (hoursWorked BETWEEN 0 AND 40),
+    ->
+    ->  PRIMARY KEY (empNo, projNo, dateWorked),
+    ->
+    ->  FOREIGN KEY (empNo)
+    ->
+    ->  REFERENCES Employee(empNo),
+    ->
+    ->  FOREIGN KEY (projNo)
+    ->
+    ->  REFERENCES Project(projNo)
+    ->
+    -> );
+Query OK, 0 rows affected (0.018 sec)
+
+MariaDB [Projects]> ALTER TABLE Employee
+    -> ADD CONSTRAINT FK_Employee_Department
+    -> FOREIGN KEY (deptNo)
+    -> REFERENCES Department(deptNo)
+    -> ;
+Query OK, 0 rows affected (0.041 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [Projects]> ALTER TABLE Department
+    -> ADD CONSTRAINT FK_Department_Manager
+    -> FOREIGN KEY (mgrEmpNo)
+    -> REFERENCES Employee(empNo);
+Query OK, 0 rows affected (0.028 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+MariaDB [Projects]> INSERT INTO Department (deptNo, deptName, mgrEmpNo) VALUES
+    -> ('D01','Human Resources',NULL),
+    -> ('D02','Information Technology',NULL),
+    -> ('D03','Finance',NULL),
+    -> ('D04','Marketing',NULL),
+    -> ('D05','Operations',NULL),
+    -> ('D06','Research',NULL),
+    -> ('D07','Sales',NULL),
+    -> ('D08','Customer Service',NULL),
+    -> ('D09','Engineering',NULL),
+    -> ('D10','Procurement',NULL),
+    -> ('D11','Legal',NULL),
+    -> ('D12','Administration',NULL);
+Query OK, 12 rows affected (0.015 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+MariaDB [Projects]> INSERT INTO Employee
+    -> (empNo,fName,lName,address,DOB,sex,position,deptNo)
+    -> VALUES
+    -> ('E01','Ama','Mensah','Accra','1990-03-15','F','Manager','D01'),
+    -> ('E02','Kwame','Asante','Kumasi','1992-07-20','M','Manager','D02'),
+    -> ('E03','Akosua','Boateng','Cape Coast','1995-01-12','F','Team Leader','D03'),
+    -> ('E04','Kojo','Owusu','Takoradi','1993-08-11','M','Analyst','D04'),
+    -> ('E05','Linda','Agyeman','Tema','1994-05-17','F','Software Developer','D05'),
+    -> ('E06','Yaw','Ofori','Accra','1991-10-30','M','Manager','D06'),
+    -> ('E07','Abena','Adjei','Sunyani','1996-02-22','F','Analyst','D07'),
+    -> ('E08','Kofi','Appiah','Ho','1992-11-08','M','Software Developer','D08'),
+    -> ('E09','Grace','Arthur','Tamale','1997-09-14','F','Team Leader','D09'),
+    -> ('E10','Daniel','Mensimah','Koforidua','1990-04-09','M','Manager','D10'),
+    -> ('E11','Esi','Quaye','Kasoa','1994-06-01','F','Software Developer','D11'),
+    -> ('E12','Michael','Addo','Accra','1993-12-18','M','Analyst','D12');
+Query OK, 12 rows affected (0.010 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+MariaDB [Projects]> UPDATE Department SET mgrEmpNo='E01' WHERE deptNo='D01';
+Query OK, 1 row affected (0.007 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [Projects]> UPDATE Department SET mgrEmpNo='E02' WHERE deptNo='D02';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [Projects]> UPDATE Department SET mgrEmpNo='E03' WHERE deptNo='D03';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [Projects]> UPDATE Department SET mgrEmpNo='E04' WHERE deptNo='D04';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [Projects]> UPDATE Department SET mgrEmpNo='E05' WHERE deptNo='D05';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [Projects]> UPDATE Department SET mgrEmpNo='E06' WHERE deptNo='D06';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [Projects]> UPDATE Department SET mgrEmpNo='E07' WHERE deptNo='D07';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [Projects]> UPDATE Department SET mgrEmpNo='E08' WHERE deptNo='D08';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [Projects]> UPDATE Department SET mgrEmpNo='E09' WHERE deptNo='D09';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [Projects]> UPDATE Department SET mgrEmpNo='E10' WHERE deptNo='D10';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [Projects]> UPDATE Department SET mgrEmpNo='E11' WHERE deptNo='D11';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [Projects]> UPDATE Department SET mgrEmpNo='E12' WHERE deptNo='D12';
+Query OK, 1 row affected (0.007 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [Projects]> INSERT INTO Project
+    -> (projNo,projName,deptNo)
+    -> VALUES
+    -> ('P01','Payroll System','D01'),
+    -> ('P02','Student Portal','D02'),
+    -> ('P03','Accounting App','D03'),
+    -> ('P04','Marketing Website','D04'),
+    -> ('P05','Inventory System','D05'),
+    -> ('P06','AI Research','D06'),
+    -> ('P07','Sales Dashboard','D07'),
+    -> ('P08','Help Desk','D08'),
+    -> ('P09','Mobile Banking','D09'),
+    -> ('P10','Supplier Tracker','D10'),
+    -> ('P11','Legal Archive','D11'),
+    -> ('P12','Office Automation','D12');
+Query OK, 12 rows affected (0.007 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+MariaDB [Projects]> INSERT INTO WorksOn
+    -> (empNo,projNo,dateWorked,hoursWorked)
+    -> VALUES
+    -> ('E01','P01','2026-01-10',35),
+    -> ('E02','P02','2026-01-10',32),
+    -> ('E03','P03','2026-01-11',28),
+    -> ('E04','P04','2026-01-11',20),
+    -> ('E05','P05','2026-01-12',38),
+    -> ('E06','P06','2026-01-12',30),
+    -> ('E07','P07','2026-01-13',25),
+    -> ('E08','P08','2026-01-13',22),
+    -> ('E09','P09','2026-01-14',40),
+    -> ('E10','P10','2026-01-14',34),
+    -> ('E11','P11','2026-01-15',36),
+    -> ('E12','P12','2026-01-15',27);
+Query OK, 12 rows affected (0.009 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+QUESTION 2
+
+MariaDB [Projects]> CREATE VIEW FemaleManagedProjects as
+    ->
+    -> SELECT
+    ->
+    -> p.projNo,
+    ->
+    -> p.projName,
+    ->
+    -> e.empNo,
+    ->
+    -> e.fName,
+    ->
+    -> e.lName
+    ->
+    -> FROM Project p
+    ->
+    -> JOIN Department d
+    ->
+    -> ON p.deptNo = d.deptNo
+    ->
+    -> JOIN Employee e
+    ->
+    -> ON d.mgrEmpNo = e.empNo
+    ->
+    -> WHERE e.sex = 'F'
+    ->
+    -> ORDER BY p.projNo;
+Query OK, 0 rows affected (0.004 sec)
+
+MariaDB [Projects]> select * from femalemanagedprojects;
++--------+------------------+-----------------+-------+--------+---------+
+| projNo | projName         | deptName        | empNo | fName  | lName   |
++--------+------------------+-----------------+-------+--------+---------+
+| P01    | Payroll System   | Human Resources | E01   | Ama    | Mensah  |
+| P03    | Accounting App   | Finance         | E03   | Akosua | Boateng |
+| P05    | Inventory System | Operations      | E05   | Linda  | Agyeman |
+| P07    | Sales Dashboard  | Sales           | E07   | Abena  | Adjei   |
+| P09    | Mobile Banking   | Engineering     | E09   | Grace  | Arthur  |
+| P11    | Legal Archive    | Legal           | E11   | Esi    | Quaye   |
++--------+------------------+-----------------+-------+--------+---------+
+6 rows in set (0.008 sec)
+
+QUESTION 3
+
+MariaDB [Projects]> CREATE VIEW EmployeeProjectHours as
+    ->
+    -> SELECT
+    ->
+    -> e.empNo,
+    ->
+    -> e.fName,
+    ->
+    -> e.lName,
+    ->
+    -> p.projName,
+    ->
+    -> w.hoursWorked
+    ->
+    -> FROM Employee e
+    ->
+    -> JOIN WorksOn w
+    ->
+    -> ON e.empNo = w.empNo
+    ->
+    -> JOIN Project p
+    ->
+    -> ON w.projNo = p.projNo
+    ->
+    -> ;
+Query OK, 0 rows affected (0.014 sec)
+
+MariaDB [Projects]> select * from employeeprojecthours;
++-------+---------+----------+-------------------+-------------+
+| empNo | fName   | lName    | projName          | hoursWorked |
++-------+---------+----------+-------------------+-------------+
+| E01   | Ama     | Mensah   | Payroll System    |          35 |
+| E02   | Kwame   | Asante   | Student Portal    |          32 |
+| E03   | Akosua  | Boateng  | Accounting App    |          28 |
+| E04   | Kojo    | Owusu    | Marketing Website |          20 |
+| E05   | Linda   | Agyeman  | Inventory System  |          38 |
+| E06   | Yaw     | Ofori    | AI Research       |          30 |
+| E07   | Abena   | Adjei    | Sales Dashboard   |          25 |
+| E08   | Kofi    | Appiah   | Help Desk         |          22 |
+| E09   | Grace   | Arthur   | Mobile Banking    |          40 |
+| E10   | Daniel  | Mensimah | Supplier Tracker  |          34 |
+| E11   | Esi     | Quaye    | Legal Archive     |          36 |
+| E12   | Michael | Addo     | Office Automation |          27 |
++-------+---------+----------+-------------------+-------------+
+12 rows in set (0.016 sec)
+
+QUESTION 4
+
+MariaDB [Projects]> CREATE VIEW EmpProject(empNo, projNo, totalHours) as
+    ->
+    -> SELECT
+    ->
+    -> w.empNo,
+    ->
+    -> w.projNo,
+    ->
+    -> SUM(hoursWorked)
+    ->
+    -> FROM Employee e,
+    ->
+    -> Project p,
+    ->
+    -> WorksOn w
+    ->
+    -> WHERE e.empNo = w.empNo
+    ->
+    -> AND p.projNo = w.projNo
+    ->
+    -> GROUP BY w.empNo, w.projNo
+    ->
+    -> ;
+Query OK, 0 rows affected (0.012 sec)
+
+
+(a). MariaDB [Projects]> select * from empproject;
++-------+--------+------------+
+| empNo | projNo | totalHours |
++-------+--------+------------+
+| E01   | P01    |         35 |
+| E02   | P02    |         32 |
+| E03   | P03    |         28 |
+| E04   | P04    |         20 |
+| E05   | P05    |         38 |
+| E06   | P06    |         30 |
+| E07   | P07    |         25 |
+| E08   | P08    |         22 |
+| E09   | P09    |         40 |
+| E10   | P10    |         34 |
+| E11   | P11    |         36 |
+| E12   | P12    |         27 |
++-------+--------+------------+
+12 rows in set (0.014 sec)
+
+(b). MariaDB [Projects]> SELECT projNo
+    -> FROM EmpProject
+    -> WHERE projNo = 'P01';
++--------+
+| projNo |
++--------+
+| P01    |
++--------+
+1 row in set (0.008 sec)
+
+(c). MariaDB [Projects]> SELECT COUNT(projNo)
+    -> FROM EmpProject
+    -> WHERE empNo = 'E01';
++---------------+
+| COUNT(projNo) |
++---------------+
+|             1 |
++---------------+
+1 row in set (0.001 sec)
+
+(d). MariaDB [Projects]> SELECT
+    ->     empNo,
+    ->     SUM(totalHours) AS totalHours
+    -> FROM EmpProject
+    -> GROUP BY empNo;
++-------+------------+
+| empNo | totalHours |
++-------+------------+
+| E01   |         35 |
+| E02   |         32 |
+| E03   |         28 |
+| E04   |         20 |
+| E05   |         38 |
+| E06   |         30 |
+| E07   |         25 |
+| E08   |         22 |
+| E09   |         40 |
+| E10   |         34 |
+| E11   |         36 |
+| E12   |         27 |
++-------+------------+
+12 rows in set (0.002 sec)
+
+QUESTION 4
+
+MariaDB [Projects]> CREATE VIEW ExpensiveParts(partNo) as
+    ->
+    -> SELECT DISTINCT partNo
+    ->
+    -> FROM Part
+    ->
+    -> WHERE partCost > 1000;
+
+The materialized view stores the results of the query instead of calculating them every time. Whenever the Part table changes, the materialized view should also be updated. If a new part with a cost greater than 1000 is added, we include its partNo in the view. If an expensive part is deleted or its cost drops below 1000, remove it from the view if it no longer meets the condition.
+
+The base table does not need to be accessed when adding a new expensive part because the new row contains all the required information. Also, the base table must be accessed when deleting a part or reducing its cost, to check whether another record for the same part still has a cost greater than 1000.
+
+
+
+
